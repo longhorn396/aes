@@ -2,6 +2,29 @@
 
 import sys, getopt
 import common_arrays
+import encrypt
+
+class AESComponent:
+
+    def to_col_order_matrix(arr):
+        matrix = [[0 for _ in range(0, 4)] for _ in range(0, 4)]
+        index = 0
+        for byte in arr:
+            matrix[index % 4][index // 4] = byte
+            index += 1
+        return matrix
+
+    def collapse_matrix(matrix, out_array):
+        for j in range(0, 4):
+            for i in range(0, 4):
+                out_array.append(matrix[i][j])
+
+    def add_round_key(matrix, key, index):
+        for j in range(0, 4):
+            for i in range(0, 4):
+                matrix[i][j] ^= key[index]
+                index += 1
+        return matrix
 
 def print_help(exit_code):
     # TODO: better usage message
@@ -22,14 +45,14 @@ def main(argv):
         if opt in ("-h", "--help"):
             print_help(0)
         elif opt in ("-i", "--ifile"):
-            input_file = arg
+            input_file = bytearray(open(arg, "rb").read())
         elif opt in ("-o", "--ofile"):
-            output_file = arg
+            output_file = open(arg, "wb")
         elif opt in ("-k", "--keyfile"):
-            key_file = arg
-        elif opt in ("-e", "--encrypt") and mode == None:
+            key_file = bytearray(open(arg, "rb").read())
+        elif opt in ("-e", "--encrypt"):
             mode = 0
-        elif opt in ("-d", "--decrypt") and mode == None:
+        elif opt in ("-d", "--decrypt"):
             mode = 1
     
     i = bytearray(open(input_file, "rb").read())
