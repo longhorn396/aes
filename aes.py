@@ -85,7 +85,8 @@ def main(argv):
     if mode == 0:
         component = encrypt.AESEncryptor()
     if mode == 1:
-        component = 0
+        import decrypt
+        component = decrypt.AESDecryptor()
     
     output = component.aes(input_file, AESComponent.expand_key(key_file, 4, 10), 10)
     output = array.array('B', output)

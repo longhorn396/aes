@@ -1,12 +1,12 @@
 from aes import AESComponent
 from common_arrays import sbox, gfp2, gfp3
 
-def myprint(state):
+def myprint(state, msg):
     out = ""
     for i in range(0, 4):
         for j in range(0, 4):
             out += str(hex(state[i][j])) + " "
-    print(out)
+    print(msg + out)
 
 class AESEncryptor(AESComponent):
 
