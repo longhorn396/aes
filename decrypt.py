@@ -1,13 +1,6 @@
 from aes import AESComponent
 from common_arrays import isbox, gfp9, gfp11, gfp13, gfp14
 
-def myprint(state, msg):
-    out = ""
-    for i in range(0, 4):
-        for j in range(0, 4):
-            out += str(hex(state[j][i])) + " "
-    print(msg + out)
-
 class AESDecryptor(AESComponent):
 
     def aes(self, block, key, nr):
@@ -20,25 +13,25 @@ class AESDecryptor(AESComponent):
     
     def decipher(self, block, key, nr):
         state = AESComponent.to_col_order_matrix(block)
-        myprint(state, "init: ")
+        self.myprint(state, "init: ")
         state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[-16:]))
-        myprint(state, "after first round key\n")
+        self.myprint(state, "after first round key\n")
         for i in range(nr - 1, 0, -1):
             print(i)
             state = self.shift_rows(state)
-            myprint(state, "after shift rows\n")
+            self.myprint(state, "after shift rows\n")
             state = self.sub_bytes(state)
-            myprint(state, "after sub bytes\n")
+            self.myprint(state, "after sub bytes\n")
             state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[16*i:16*(i+1)]))
-            myprint(state, "after round key\n")
+            self.myprint(state, "after round key\n")
             state = self.mix_columns(state)
-            myprint(state, "after mix columns\n")
+            self.myprint(state, "after mix columns\n")
         state = self.shift_rows(state)
-        myprint(state, "after last shift rows\n")
+        self.myprint(state, "after last shift rows\n")
         state = self.sub_bytes(state)
-        myprint(state, "after last sub bytes\n")
+        self.myprint(state, "after last sub bytes\n")
         state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[:16]))
-        myprint(state, "final: ")
+        self.myprint(state, "final: ")
         return state
 
     def sub_bytes(self, state):
@@ -48,10 +41,4 @@ class AESDecryptor(AESComponent):
         return AESComponent.shift_rows(state, lambda x, y : (x + y) % 4, lambda x, y : y)
     
     def mix_columns(self, state):
-        new_state = [word[:] for word in state]
-        for i in range(0, 4):
-            new_state[0][i] = gfp14[state[0][i]] ^ gfp11[state[1][i]] ^ gfp13[state[2][i]] ^ gfp9[state[3][i]]
-            new_state[1][i] = gfp9[state[0][i]] ^ gfp14[state[1][i]] ^ gfp11[state[2][i]] ^ gfp13[state[3][i]]
-            new_state[2][i] = gfp13[state[0][i]] ^ gfp9[state[1][i]] ^ gfp14[state[2][i]] ^ gfp11[state[3][i]]
-            new_state[3][i] = gfp11[state[0][i]] ^ gfp13[state[1][i]] ^ gfp9[state[2][i]] ^ gfp14[state[3][i]]
-        return new_state
+        return AESComponent.mix_columns(state, lambda x: gfp14[x], lambda x: gfp11[x], lambda x: gfp13[x], lambda x: gfp9[x])

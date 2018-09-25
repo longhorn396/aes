@@ -5,6 +5,13 @@ import common_arrays, encrypt
 
 class AESComponent:
 
+    def myprint(self, state, msg):
+        out = ""
+        for i in range(0, 4):
+            for j in range(0, 4):
+                out += str(hex(state[j][i])) + " "
+        print(msg + out)
+
     @staticmethod
     def to_col_order_matrix(arr):
         matrix = [[0 for _ in range(0, 4)] for _ in range(0, 4)]
@@ -39,6 +46,16 @@ class AESComponent:
         for i in range(1, len(state)):
             for j in range(0, 4):
                 new_state[i][f(i, j)] = state[i][(l(i, j))]
+        return new_state
+    
+    @staticmethod
+    def mix_columns(state, f, g, h, l):
+        new_state = [word[:] for word in state]
+        for i in range(0, 4):
+            new_state[0][i] = f(state[0][i]) ^ g(state[1][i]) ^ h(state[2][i]) ^ l(state[3][i])
+            new_state[1][i] = l(state[0][i]) ^ f(state[1][i]) ^ g(state[2][i]) ^ h(state[3][i])
+            new_state[2][i] = h(state[0][i]) ^ l(state[1][i]) ^ f(state[2][i]) ^ g(state[3][i])
+            new_state[3][i] = g(state[0][i]) ^ h(state[1][i]) ^ l(state[2][i]) ^ f(state[3][i])
         return new_state
     
     @staticmethod
