@@ -18,9 +18,8 @@ class AESEncryptor(AESComponent):
         state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[:16]))
         self.myprint(state, "after first round key\n")
         for i in range(1, nr):
-            print(i)
             state = self.sub_bytes(state)
-            self.myprint(state, "after sub bytes\n")
+            self.myprint(state, str(i) + "\nafter sub bytes\n")
             state = self.shift_rows(state)
             self.myprint(state, "after shift rows\n")
             state = self.mix_columns(state)

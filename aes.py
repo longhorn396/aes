@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 import sys, getopt, array
-import common_arrays, encrypt
+import common_arrays
 
 class AESComponent:
 
@@ -74,21 +74,29 @@ def main(argv):
     input_file = None
     output_file = None
     key_file = None
+    key_size = 128
     mode = None
+    nk = {128:  4, 256:  8}
+    nr = {128: 10, 256: 14}
 
     try:
-      opts, _ = getopt.getopt(argv,"hedi:o:k:",["help","encrypt","decrypt","ifile=","ofile=","kfile="])
+      opts, _ = getopt.getopt(argv,"hvedi:o:k:s:",["help","verbose","encrypt","decrypt","ifile=","ofile=","kfile=","keysize="])
     except getopt.GetoptError:
         print_help(2)
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print_help(0)
+        elif opt in ("-v", "--verbose"):
+            verbose = True
         elif opt in ("-i", "--ifile"):
             input_file = open(arg, "rb").read()
         elif opt in ("-o", "--ofile"):
             output_file = open(arg, "wb")
         elif opt in ("-k", "--keyfile"):
             key_file = open(arg, "rb").read()
+        elif opt in ("-s", "--keysize"):
+            key_size = int(arg)
+            if key_size != 256 and key_size != 128: print_help(-1)
         elif opt in ("-e", "--encrypt"):
             mode = 0
         elif opt in ("-d", "--decrypt"):
@@ -96,12 +104,13 @@ def main(argv):
         
     component = None
     if mode == 0:
+        import encrypt
         component = encrypt.AESEncryptor()
     if mode == 1:
         import decrypt
         component = decrypt.AESDecryptor()
     
-    output = component.aes(input_file, AESComponent.expand_key(key_file, 4, 10), 10)
+    output = component.aes(input_file, AESComponent.expand_key(key_file, nk[key_size], nr[key_size]), nr[key_size])
     output = array.array('B', output)
     output_file.write(output)
     output_file.close()
