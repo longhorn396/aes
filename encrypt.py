@@ -3,7 +3,9 @@ from common_arrays import sbox, gfp2, gfp3
 
 class AESEncryptor(AESComponent):
 
-    def aes(self, block, key, nr):
+    def aes(self, block, key, nr, verbose):
+        if verbose:
+            self.verbose = True
         # pad = 16 - (len(block) % 16)
         # block.extend([0] * pad)
         # block[-1] = pad

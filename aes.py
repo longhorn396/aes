@@ -5,12 +5,15 @@ import common_arrays
 
 class AESComponent:
 
+    verbose = False
+
     def myprint(self, state, msg):
-        out = ""
-        for i in range(0, 4):
-            for j in range(0, 4):
-                out += str(hex(state[j][i])) + " "
-        print(msg + out)
+        if self.verbose:
+            out = ""
+            for i in range(0, 4):
+                for j in range(0, 4):
+                    out += str(hex(state[j][i])) + " "
+            print(msg + out)
 
     @staticmethod
     def to_col_order_matrix(arr):
@@ -71,6 +74,7 @@ def print_help(exit_code):
     sys.exit(exit_code)
 
 def main(argv):
+    verbose = False
     input_file = None
     output_file = None
     key_file = None
@@ -110,7 +114,7 @@ def main(argv):
         import decrypt
         component = decrypt.AESDecryptor()
     
-    output = component.aes(input_file, AESComponent.expand_key(key_file, nk[key_size], nr[key_size]), nr[key_size])
+    output = component.aes(input_file, AESComponent.expand_key(key_file, nk[key_size], nr[key_size]), nr[key_size], verbose)
     output = array.array('B', output)
     output_file.write(output)
     output_file.close()

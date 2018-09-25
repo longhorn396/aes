@@ -3,7 +3,9 @@ from common_arrays import isbox, gfp9, gfp11, gfp13, gfp14
 
 class AESDecryptor(AESComponent):
 
-    def aes(self, block, key, nr):
+    def aes(self, block, key, nr, verbose):
+        if verbose:
+            self.verbose = True
         output = []
         for i in range(0, len(block), 16):
             output = AESComponent.collapse_matrix(self.decipher(block[i:i+16], key, nr), output)
