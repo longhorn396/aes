@@ -49,12 +49,10 @@ class AESEncryptor(AESComponent):
         return AESComponent.shift_rows(state, lambda x, y : y, lambda x, y : (x + y) % 4)
     
     def mix_columns(self, state):
-        temp = [0 for _ in range(0, 4)]
+        new_state = [word[:] for word in state]
         for i in range(0, 4):
-            temp[0] = gfp2[state[0][i]] ^ gfp3[state[1][i]] ^ state[2][i] ^ state[3][i]
-            temp[1] = state[0][i] ^ gfp2[state[1][i]] ^ gfp3[state[2][i]] ^ state[3][i]
-            temp[2] = state[0][i] ^ state[1][i] ^ gfp2[state[2][i]] ^ gfp3[state[3][i]]
-            temp[3] = gfp3[state[0][i]] ^ state[1][i] ^ state[2][i] ^ gfp2[state[3][i]]
-            for j in range(0, 4):
-                state[j][i] = temp[j]
-        return state
+            new_state[0][i] = gfp2[state[0][i]] ^ gfp3[state[1][i]] ^ state[2][i] ^ state[3][i]
+            new_state[1][i] = state[0][i] ^ gfp2[state[1][i]] ^ gfp3[state[2][i]] ^ state[3][i]
+            new_state[2][i] = state[0][i] ^ state[1][i] ^ gfp2[state[2][i]] ^ gfp3[state[3][i]]
+            new_state[3][i] = gfp3[state[0][i]] ^ state[1][i] ^ state[2][i] ^ gfp2[state[3][i]]
+        return new_state
