@@ -34,15 +34,11 @@ class AESComponent:
         return w
     
     @staticmethod
-    def sub_bytes(state, box):
-        return [[box[byte] for byte in word] for word in state]
-    
-    @staticmethod
-    def shift_rows(state, l):
+    def shift_rows(state, f, l):
         new_state = [word[:] for word in state]
         for i in range(1, len(state)):
             for j in range(0, 4):
-                new_state[i][j] = state[i][(l(i, j)) % 4]
+                new_state[i][f(i, j)] = state[i][(l(i, j))]
         return new_state
     
     @staticmethod

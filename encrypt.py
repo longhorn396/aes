@@ -5,7 +5,7 @@ def myprint(state, msg):
     out = ""
     for i in range(0, 4):
         for j in range(0, 4):
-            out += str(hex(state[i][j])) + " "
+            out += str(hex(state[j][i])) + " "
     print(msg + out)
 
 class AESEncryptor(AESComponent):
@@ -21,22 +21,32 @@ class AESEncryptor(AESComponent):
     
     def cipher(self, block, key, nr):
         state = AESComponent.to_col_order_matrix(block)
+        myprint(state, "init: ")
         state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[:16]))
+        myprint(state, "after first round key\n")
         for i in range(1, nr):
+            print(i)
             state = self.sub_bytes(state)
+            myprint(state, "after sub bytes\n")
             state = self.shift_rows(state)
+            myprint(state, "after shift rows\n")
             state = self.mix_columns(state)
+            myprint(state, "after mix columns\n")
             state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[16*i:16*(i+1)]))
+            myprint(state, "after round key\n")
         state = self.sub_bytes(state)
+        myprint(state, "after last sub bytes\n")
         state = self.shift_rows(state)
+        myprint(state, "after last shift rows\n")
         state = AESComponent.add_round_key(state, AESComponent.to_col_order_matrix(key[-16:]))
+        myprint(state, "final: ")
         return state
 
     def sub_bytes(self, state):
-        return AESComponent.sub_bytes(state, sbox)
+        return [[sbox[byte] for byte in word] for word in state]
     
     def shift_rows(self, state):
-        return AESComponent.shift_rows(state, lambda x, y : x + y)
+        return AESComponent.shift_rows(state, lambda x, y : y, lambda x, y : (x + y) % 4)
     
     def mix_columns(self, state):
         temp = [0 for _ in range(0, 4)]
