@@ -1,10 +1,9 @@
 #! /usr/bin/python3
 
-import sys, getopt, array
-import common_arrays
+import array, common_arrays, getopt, os, sys
 
 class AESComponent:
-    # TODO: make good documentation
+    # TODO: make good documentation; maybe make key correct size if it is not?
     verbose = False
 
     def myprint(self, state, msg):
@@ -72,8 +71,8 @@ def print_help(exit_code):
     print("usage: aes.py [options]")
     print("\t-h --help\tPrint this message")
     print("\t-v --verbose\tPrint the state after every operation")
-    print("\t-e --encrypt\tEncrypt the message")
-    print("\t-d --decrypt\tDecrypt the message")
+    print("\t-e --encrypt\tEncrypt the message (one of these two is required)")
+    print("\t-d --decrypt\tDecrypt the message (one of these two is required)")
     print("\t-i --ifile\tThe input file (required)")
     print("\t-o --ofile\tThe output file (required)")
     print("\t-k --kfile\tThe key file (required)")
@@ -82,6 +81,19 @@ def print_help(exit_code):
     print("python aes.py -i test_in -k test_key -o cipher -e --verbose")
     print("python aes.py -i cipher -k big_key -o plaintext -d -s 256")
     sys.exit(exit_code)
+
+def open_and_read(fName):
+    if os.path.exists(fName):
+        with open(fName, "rb") as f:
+            try:
+                bytes = f.read()
+                f.close()
+                return bytes
+            except Exception:
+                sys.stderr.write("Error reading files. Please make sure they exist and are readable\n")
+                print_help(-1)
+    sys.stderr.write("Error reading files. Please make sure they exist\n")
+    print_help(-1)
 
 def main(argv):
     verbose = False
@@ -92,7 +104,7 @@ def main(argv):
     mode = None
     nk = {128:  4, 256:  8}
     nr = {128: 10, 256: 14}
-    # TODO: Error handling
+    
     try:
       opts, _ = getopt.getopt(argv,"hvedi:o:k:s:",["help","verbose","encrypt","decrypt","ifile=","ofile=","kfile=","keysize="])
     except getopt.GetoptError:
@@ -103,19 +115,23 @@ def main(argv):
         elif opt in ("-v", "--verbose"):
             verbose = True
         elif opt in ("-i", "--ifile"):
-            input_file = open(arg, "rb").read()
+            input_file = open_and_read(arg)
         elif opt in ("-o", "--ofile"):
             output_file = open(arg, "wb")
         elif opt in ("-k", "--keyfile"):
-            key_file = open(arg, "rb").read()
+            key_file = open_and_read(arg)
         elif opt in ("-s", "--keysize"):
             key_size = int(arg)
-            if key_size != 256 and key_size != 128: print_help(-1)
+            if key_size != 256 and key_size != 128:
+                print_help(-1)
         elif opt in ("-e", "--encrypt"):
             mode = 0
         elif opt in ("-d", "--decrypt"):
             mode = 1
-        
+    
+    if input_file == None or key_file == None or output_file == None or mode == None:
+        print_help(-1)
+    
     component = None
     if mode == 0:
         import encrypt
