@@ -4,7 +4,7 @@ import sys, getopt, array
 import common_arrays
 
 class AESComponent:
-
+    # TODO: make good documentation
     verbose = False
 
     def myprint(self, state, msg):
@@ -69,8 +69,18 @@ class AESComponent:
         return state
 
 def print_help(exit_code):
-    # TODO: better usage message
     print("usage: aes.py [options]")
+    print("\t-h --help\tPrint this message")
+    print("\t-v --verbose\tPrint the state after every operation")
+    print("\t-e --encrypt\tEncrypt the message")
+    print("\t-d --decrypt\tDecrypt the message")
+    print("\t-i --ifile\tThe input file (required)")
+    print("\t-o --ofile\tThe output file (required)")
+    print("\t-k --kfile\tThe key file (required)")
+    print("\t-s --keysize\tEither 128 (default) or 256")
+    print("Examples:")
+    print("python aes.py -i test_in -k test_key -o cipher -e --verbose")
+    print("python aes.py -i cipher -k big_key -o plaintext -d -s 256")
     sys.exit(exit_code)
 
 def main(argv):
@@ -82,7 +92,7 @@ def main(argv):
     mode = None
     nk = {128:  4, 256:  8}
     nr = {128: 10, 256: 14}
-
+    # TODO: Error handling
     try:
       opts, _ = getopt.getopt(argv,"hvedi:o:k:s:",["help","verbose","encrypt","decrypt","ifile=","ofile=","kfile=","keysize="])
     except getopt.GetoptError:

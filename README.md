@@ -14,7 +14,19 @@
 
 ### Manually
 
-Run `python aes.py --help` for complete list of options
+Run `python aes.py --help` for complete list of options and examples
+
+```bash
+usage: aes.py [options]
+        -h --help       Print this message
+        -v --verbose    Print the state after every operation
+        -e --encrypt    Encrypt the message
+        -d --decrypt    Decrypt the message
+        -i --ifile      The input file (required)
+        -o --ofile      The output file (required)
+        -k --kfile      The key file (required)
+        -s --keysize    Either 128 (default) or 256
+```
 
 ## Contact
 
