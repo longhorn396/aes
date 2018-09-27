@@ -84,8 +84,8 @@ class AESComponent:
     @staticmethod
     def add_round_key(state, key):
         """Adds the current state with the correct portion of the key scedule"""
-        for j in range(0, 4):
-            for i in range(0, 4):
+        for i in range(0, 4):
+            for j in range(0, 4):
                 state[i][j] ^= key[i][j]
         return state
 
@@ -93,7 +93,7 @@ class AESComponent:
 def print_help(exit_code):
     """Prints the help message and examples of how to run the program"""
     print("usage: aes.py [options]")
-    print("\t-h --help\tPrint this message")
+    print("\t-h --help\tPrint this message and exit")
     print("\t-v --verbose\tPrint the state after every operation")
     print("\t-e --encrypt\tEncrypt the message (one of these two is required)")
     print("\t-d --decrypt\tDecrypt the message (one of these two is required)")
