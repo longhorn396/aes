@@ -12,7 +12,7 @@ class AESDecryptor(AESComponent):
         for i in range(0, len(block), 16):
             output = AESComponent.collapse_matrix(
                 self.decipher(block[i:i+16], key, nr), output)
-        # output = output[:-1 * output[-1]]
+        output = output[:-1 * output[-1]]
         return output
 
     def decipher(self, block, key, nr):
