@@ -97,7 +97,7 @@ def print_help(exit_code):
     print("\t-v --verbose\tPrint the state after every operation")
     print("\t-i --inputfile\tThe input file (required)")
     print("\t-o --outputfile\tThe output file (required)")
-    print("\t-k --kfile\tThe key file (required)")
+    print("\t-k --keyfile\tThe key file (required)")
     print("\t-m --mode\tEither encrypt or decrypt (required)")
     print("\t-e --encrypt\tAlternate of --mode encrypt")
     print("\t-d --decrypt\tAlternate of --mode decrypt")
@@ -136,7 +136,7 @@ def main(argv):
 
     try:
         opts, _ = getopt.getopt(argv, "hvedi:o:k:s:m:", [
-                                "help", "verbose", "encrypt", "decrypt", "inputfile=", "outputfile=", "kfile=", "keysize=", "mode="])
+                                "help", "verbose", "encrypt", "decrypt", "inputfile=", "outputfile=", "keyfile=", "keysize=", "mode="])
     except getopt.GetoptError:
         print_help(2)
     for opt, arg in opts:
