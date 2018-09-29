@@ -9,7 +9,7 @@ import sys
 
 class AESComponent:
     """Class holding common functionality for both encryption and decryption"""
-    # TODO: maybe make key correct size if it is not?
+
     verbose = False
 
     def myprint(self, state, msg):
@@ -95,11 +95,12 @@ def print_help(exit_code):
     print("usage: aes.py [options]")
     print("\t-h --help\tPrint this message and exit")
     print("\t-v --verbose\tPrint the state after every operation")
-    print("\t-e --encrypt\tEncrypt the message (one of these two is required)")
-    print("\t-d --decrypt\tDecrypt the message (one of these two is required)")
-    print("\t-i --ifile\tThe input file (required)")
-    print("\t-o --ofile\tThe output file (required)")
+    print("\t-i --inputfile\tThe input file (required)")
+    print("\t-o --outputfile\tThe output file (required)")
     print("\t-k --kfile\tThe key file (required)")
+    print("\t-m --mode\tEither encrypt or decrypt (required)")
+    print("\t-e --encrypt\tAlternate of --mode encrypt")
+    print("\t-d --decrypt\tAlternate of --mode decrypt")
     print("\t-s --keysize\tEither 128 (default) or 256")
     print("Examples:")
     print("python aes.py -i test_in -k test_key -o cipher -e --verbose")
@@ -134,8 +135,8 @@ def main(argv):
     nr = {128: 10, 256: 14}
 
     try:
-        opts, _ = getopt.getopt(argv, "hvedi:o:k:s:", [
-                                "help", "verbose", "encrypt", "decrypt", "ifile=", "ofile=", "kfile=", "keysize="])
+        opts, _ = getopt.getopt(argv, "hvedi:o:k:s:m:", [
+                                "help", "verbose", "encrypt", "decrypt", "inputfile=", "outputfile=", "kfile=", "keysize=", "mode="])
     except getopt.GetoptError:
         print_help(2)
     for opt, arg in opts:
@@ -143,9 +144,9 @@ def main(argv):
             print_help(0)
         elif opt in ("-v", "--verbose"):
             verbose = True
-        elif opt in ("-i", "--ifile"):
+        elif opt in ("-i", "--inputfile"):
             input_file = open_and_read(arg)
-        elif opt in ("-o", "--ofile"):
+        elif opt in ("-o", "--outputfile"):
             output_file = open(arg, "wb")
         elif opt in ("-k", "--keyfile"):
             key_file = open_and_read(arg)
@@ -153,12 +154,15 @@ def main(argv):
             key_size = int(arg)
             if key_size != 256 and key_size != 128:
                 print_help(-1)
-        elif opt in ("-e", "--encrypt"):
+        elif opt in ("-e", "--encrypt") or (opt in ("-m", "--mode") and arg == "encrypt"):
             mode = 0
-        elif opt in ("-d", "--decrypt"):
+        elif opt in ("-d", "--decrypt") or (opt in ("-m", "--mode") and arg == "decrypt"):
             mode = 1
 
     if input_file == None or key_file == None or output_file == None or mode == None:
+        print_help(-1)
+    elif key_size != 8 * len(key_file):
+        sys.stderr.write("Mismatching key sizes\n")
         print_help(-1)
 
     component = None
@@ -169,7 +173,7 @@ def main(argv):
         import decrypt
         component = decrypt.AESDecryptor()
 
-    output = component.aes(input_file, AESComponent.expand_key(
+    output = component.aes(bytearray(input_file), AESComponent.expand_key(
         key_file, nk[key_size], nr[key_size]), nr[key_size], verbose)
     output = array.array('B', output)
     output_file.write(output)

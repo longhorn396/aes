@@ -9,7 +9,7 @@ class AESEncryptor(AESComponent):
         if verbose:
             self.verbose = True
         pad = 16 - (len(block) % 16)
-        block.append([0] * pad)
+        block.extend([0] * pad)
         block[-1] = pad
         output = []
         for i in range(0, len(block), 16):

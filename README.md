@@ -2,6 +2,8 @@
 
 ## Explanation
 
+My two test cases were taken from [this example](https://kavaliro.com/wp-content/uploads/2014/03/AES.pdf) as I preferred it to the walkthroughs in the NIST document for debugging.
+
 ### AESComponent
 
 #### myprint
@@ -22,7 +24,7 @@ Takes either a 128 or 256 bit key and expands it to a key schedule as described 
 
 #### shift_rows (common)
 
-Takes in a state and two functions, one of which is the identity. It creates a copy of the state before shifting the bytes in the four rows of the new state by 0, 1, 2, and 3 respectively and returns. The direction of the shift is determined by which function is the identity.
+Takes in a state and two functions, one of which is the identity. It creates a copy of the state before shifting the bytes in the four rows of the new state by 0, 1, 2, and 3 respectively and returns. The direction of the shift is determined by which function returns the raw column number as opposed to the computed index.
 
 #### mix_columns (common)
 
@@ -112,13 +114,14 @@ Run `python aes.py --help` for complete list of options and examples
 
 ```bash
 usage: aes.py [options]
-        -h --help       Print this message
+        -h --help       Print this message and exit
         -v --verbose    Print the state after every operation
-        -e --encrypt    Encrypt the message
-        -d --decrypt    Decrypt the message
-        -i --ifile      The input file (required)
-        -o --ofile      The output file (required)
+        -i --inputfile  The input file (required)
+        -o --outputfile The output file (required)
         -k --kfile      The key file (required)
+        -m --mode       Either encrypt or decrypt (required)
+        -e --encrypt    Alternate of --mode encrypt
+        -d --decrypt    Alternate of --mode decrypt
         -s --keysize    Either 128 (default) or 256
 ```
 
