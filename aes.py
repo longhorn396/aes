@@ -103,8 +103,8 @@ def print_help(exit_code):
     print("\t-d --decrypt\tAlternate of --mode decrypt")
     print("\t-s --keysize\tEither 128 (default) or 256")
     print("Examples:")
-    print("python aes.py -i test_in -k test_key -o cipher -e --verbose")
-    print("python aes.py -i cipher -k big_key -o plaintext -d -s 256")
+    print("python aes.py -i tests/test_in -k tests/test_key -o tests/cipher -e --verbose")
+    print("python aes.py -i tests/cipher -k tests/big_key -o tests/plaintext -d -s 256")
     sys.exit(exit_code)
 
 
