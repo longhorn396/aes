@@ -4,6 +4,8 @@
 
 My two test cases were taken from [this example](https://kavaliro.com/wp-content/uploads/2014/03/AES.pdf) as I preferred it to the walkthroughs in the NIST document for debugging.
 
+I also made a web UI for this project. For more information on that, see [here](README.md#web).
+
 ### AESComponent
 
 #### myprint
@@ -95,6 +97,10 @@ A helper method to safely open files. Takes in a file name, checks to see if it 
 #### main
 
 The runner method. Parses arguments, checks for missing requirements, and calls the aes method on the appropriate component before taking the cipher or plaintext, writes them to the appropriate file and closing it.
+
+### <a name="web"></a>Web UI
+
+The UI is a simple Flask application that runs locally at `127.0.0.1:80`. All the logic can be found in main.py and is very similar to the main function in aes.py, but without some of the argument checking and validatoin as I leave some of that to the HTML form. I also allow the user to specify thier own filename and extension to make opening downloaded files from the browser easier.
 
 ## How to Run
 

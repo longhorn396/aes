@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, make_response
 from aes import AESComponent
-import array
 import logging
 
 app = Flask(__name__)
