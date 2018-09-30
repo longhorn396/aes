@@ -4,7 +4,7 @@
 
 My two test cases were taken from [this example](https://kavaliro.com/wp-content/uploads/2014/03/AES.pdf) as I preferred it to the walkthroughs in the NIST document for debugging.
 
-I also made a web UI for this project. For more information on that, see [here](README.md#web-ui). Help for making that was found [here](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/appengine/standard/flask/tutorial).
+I also made a web UI for this project. For more information on that, see [here](README.md#web-ui). It is also deployed on Google Cloud Platform [here](https://aes-crypto-218018.appspot.com/). Help for making that was found [here](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/appengine/standard/flask/tutorial).
 
 ### AESComponent
 
