@@ -1,6 +1,5 @@
 #! /usr/bin/python3
 
-import array
 import common_arrays
 import getopt
 import os
@@ -175,8 +174,7 @@ def main(argv):
 
     output = component.aes(bytearray(input_file), AESComponent.expand_key(
         key_file, nk[key_size], nr[key_size]), nr[key_size], verbose)
-    output = array.array('B', output)
-    output_file.write(output)
+    output_file.write(bytes(output))
     output_file.close()
 
 
