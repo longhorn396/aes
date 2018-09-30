@@ -41,7 +41,7 @@ class AESComponent:
         """Expands the key to a key schedule as described in the ECB standard"""
         w = [word for word in key]
         for i in range(nk, 4 * (nr + 1)):
-            temp = w[4*(i-1):4*i]
+            temp = w[4 * (i - 1):4 * i]
             if i % nk == 0:
                 temp = [common_arrays.sbox[byte]
                         for byte in temp[1:] + temp[:1]]
@@ -130,12 +130,13 @@ def main(argv):
     key_file = None
     key_size = 128
     mode = None
-    nk = {128:  4, 256:  8}
+    nk = {128: 4, 256: 8}
     nr = {128: 10, 256: 14}
 
     try:
-        opts, _ = getopt.getopt(argv, "hvedi:o:k:s:m:", [
-                                "help", "verbose", "encrypt", "decrypt", "inputfile=", "outputfile=", "keyfile=", "keysize=", "mode="])
+        opts, _ = getopt.getopt(
+            argv, "hvedi:o:k:s:m:", [
+                "help", "verbose", "encrypt", "decrypt", "inputfile=", "outputfile=", "keyfile=", "keysize=", "mode="])
     except getopt.GetoptError:
         print_help(2)
     for opt, arg in opts:
@@ -158,7 +159,7 @@ def main(argv):
         elif opt in ("-d", "--decrypt") or (opt in ("-m", "--mode") and arg == "decrypt"):
             mode = 1
 
-    if input_file == None or key_file == None or output_file == None or mode == None:
+    if input_file is None or key_file is None or output_file is None or mode is None:
         print_help(-1)
     elif key_size != 8 * len(key_file):
         sys.stderr.write("Mismatching key sizes\n")

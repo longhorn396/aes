@@ -11,7 +11,7 @@ class AESDecryptor(AESComponent):
         output = []
         for i in range(0, len(block), 16):
             output = AESComponent.collapse_matrix(
-                self.decipher(block[i:i+16], key, nr), output)
+                self.decipher(block[i:i + 16], key, nr), output)
         output = output[:-1 * output[-1]]
         return output
 
@@ -28,7 +28,7 @@ class AESDecryptor(AESComponent):
             state = self.sub_bytes(state)
             self.myprint(state, "after sub bytes\n")
             state = AESComponent.add_round_key(
-                state, AESComponent.to_col_order_matrix(key[16*i:16*(i+1)]))
+                state, AESComponent.to_col_order_matrix(key[16 * i:16 * (i + 1)]))
             self.myprint(state, "after round key\n")
             state = self.mix_columns(state)
             self.myprint(state, "after mix columns\n")
@@ -45,7 +45,15 @@ class AESDecryptor(AESComponent):
         return [[isbox[byte] for byte in word] for word in state]
 
     def shift_rows(self, state):
-        return AESComponent.shift_rows(state, lambda x, y: (x + y) % 4, lambda x, y: y)
+        return AESComponent.shift_rows(
+            state, lambda x, y: (
+                x + y) %
+            4, lambda x, y: y)
 
     def mix_columns(self, state):
-        return AESComponent.mix_columns(state, lambda x: gfp14[x], lambda x: gfp11[x], lambda x: gfp13[x], lambda x: gfp9[x])
+        return AESComponent.mix_columns(
+            state,
+            lambda x: gfp14[x],
+            lambda x: gfp11[x],
+            lambda x: gfp13[x],
+            lambda x: gfp9[x])

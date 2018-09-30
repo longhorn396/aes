@@ -21,7 +21,7 @@ def submitted_form():
     filename = request.form["outputfile"]
     keysize = int(request.form["size"])
     mode = request.form["mode"]
-    nk = {128:  4, 256:  8}
+    nk = {128: 4, 256: 8}
     nr = {128: 10, 256: 14}
 
     component = None
