@@ -1,3 +1,9 @@
+install:
+	pip install -t lib -r requirements.txt
+
+local:
+	@python main.py
+
 clean: 
 	@rm cipher
 	@rm plaintext

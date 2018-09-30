@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>CS 361 AES</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+        <h1 class="text-center">Web UI For CS 361 AES</h1>
+        <hr/>
+        <form action="/submitted" method="post" enctype="multipart/form-data">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="inputfile">Upload Inputfile</label>
+                    <div class="col-md-4">
+                        <input type="file" id="inputfile" name="inputfile" class="form-control" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="keyfile">Upload Key</label>
+                    <div class="col-md-4">
+                        <input type="file" id="keyfile" name="keyfile" class="form-control" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="outputfile">Output File Name</label>
+                    <div class="col-md-4">
+                        <input type="text" id="outputfile" name="outputfile" class="form-control" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="size">Key Size</label>
+                    <div class="col-md-4"> 
+                        <label class="radio-inline" for="size-0">
+                            <input type="radio" name="size" id="size-0" value="128" checked="checked">
+                            128
+                        </label> 
+                        <label class="radio-inline" for="size-1">
+                            <input type="radio" name="size" id="size-1" value="256">
+                            256
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="mode">Mode</label>
+                    <div class="col-md-4"> 
+                        <label class="radio-inline" for="mode-0">
+                            <input type="radio" name="mode" id="mode-0" value="encrypt" checked="checked">
+                            Encrypt
+                        </label> 
+                        <label class="radio-inline" for="mode-1">
+                            <input type="radio" name="mode" id="mode-1" value="decrypt">
+                            Decrypt
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label ui-helper-hidden-accessible" for="submitbutton"></label>
+                    <div class="col-md-4">
+                        <button type="submit" id="submitbutton" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
