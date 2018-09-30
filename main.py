@@ -1,15 +1,19 @@
 from flask import Flask, render_template, request, make_response
 from aes import AESComponent
-import array, logging
+import array
+import logging
 
 app = Flask(__name__)
+
 
 def open_and_read(fName):
     return fName.stream.read()
 
+
 @app.route("/")
 def form():
     return render_template("index.html")
+
 
 @app.route("/submitted", methods=["POST"])
 def submitted_form():
@@ -36,15 +40,18 @@ def submitted_form():
     response.headers["Content-Disposition"] = "attachment; filename=" + filename
     return response
 
+
 @app.errorhandler(400)
 def user_error(e):
     logging.exception('An error occurred during a request.')
     return "Something went wrong", 400
 
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')
     return 'An internal error occurred.', 500
+
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=80)
