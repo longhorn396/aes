@@ -5,15 +5,18 @@ local:
 	@python main.py
 
 clean: 
-	@rm cipher
-	@rm plaintext
+	@rm tests/cipher
+	@rm tests/plaintext
 
 test_128:
-	@python aes.py -i test_in -k test_key -o cipher -e
-	@python aes.py -i cipher -k test_key -o plaintext -d
+	@python aes.py -i tests/test_in -k tests/test_key -o tests/cipher -e
+	@python aes.py -i tests/cipher -k tests/test_key -o tests/plaintext -d
 	@echo "Encrypted message in cipher file. Decoded message in plaintext file"
 
 test_256:
-	@python aes.py -i big_in -k big_key -o cipher -e -s 256
-	@python aes.py -i cipher -k big_key -o plaintext -d -s 256
+	@python aes.py -i tests/big_in -k tests/big_key -o tests/cipher -e -s 256
+	@python aes.py -i tests/cipher -k tests/big_key -o tests/plaintext -d -s 256
 	@echo "Encrypted message in cipher file. Decoded message in plaintext file"
+
+test_piazza:
+	@./tests/piazza_script.sh
