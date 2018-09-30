@@ -58,7 +58,7 @@ class AESComponent:
         Parameters f and l are functions that compute the offset to shift the rows by
         """
         new_state = [word[:] for word in state]
-        for i in range(1, len(state)):
+        for i in range(1, 4):
             for j in range(0, 4):
                 new_state[i][f(i, j)] = state[i][(l(i, j))]
         return new_state

@@ -4,7 +4,7 @@
 
 My two test cases were taken from [this example](https://kavaliro.com/wp-content/uploads/2014/03/AES.pdf) as I preferred it to the walkthroughs in the NIST document for debugging.
 
-I also made a web UI for this project. For more information on that, see [here](README.md#web-ui).
+I also made a web UI for this project. For more information on that, see [here](README.md#web-ui). Help for making that was found [here](https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/appengine/standard/flask/tutorial).
 
 ### AESComponent
 
@@ -26,7 +26,7 @@ Takes either a 128 or 256 bit key and expands it to a key schedule as described 
 
 #### shift_rows (common)
 
-Takes in a state and two functions, one of which is the identity. It creates a copy of the state before shifting the bytes in the four rows of the new state by 0, 1, 2, and 3 respectively and returns. The direction of the shift is determined by which function returns the raw column number as opposed to the computed index.
+Takes in a state and two functions, one of which is the identity. It creates a copy of the state before shifting the bytes in the four rows of the new state by 0, 1, 2, and 3 respectively and returns the resulting state. The direction of the shift is determined by which function returns the raw column index as opposed to the computed column index. For example, the computed column index is always `[(i + j) % 4]` where `i` is the row and `j` is the column. `i` is static for each row and each variable can only be 0 through 3. If the computation function is passed last, then it will be used to index into the state while the new_state is accessed linearly, so `new_state[1][0]` becomes `state[1][1]`, `new_state[2][2]` becomes `state[2][0]`, and so on. Likewise, if the computation function is passed after the state, `new_state[1][0]` becomes `state[1][3]`, `new_state[2][2]` becomes `state[2][0]`, and so on.
 
 #### mix_columns (common)
 
@@ -52,11 +52,11 @@ Takes in the state. It looks up each byte in each word in the state and substitu
 
 #### shift_rows (encryption)
 
-Take in the state. Passes the state, an identity function, and the function that determines how much to shift the rows by to AESComponent.shift_rows. Passing the functions in this way shifts the bytes in the rows to the left by the desired ammounts.
+Take in the state. Passes the state, a column identity function, and the function that determines how much to shift the rows by to AESComponent.shift_rows. Passing the functions in this way shifts the bytes in the rows to the left by the desired ammounts.
 
 #### mix_columns (encryption)
 
-Takes in the state. Passes the state, two array access functions and two identity funcitons to AESComponent.mix_columns. The combination of these two functions acheives the same result as the multiplication of the static matrix and the state described in the NIST document.
+Takes in the state. Passes the state, two array access functions (gfp2 and gfp3), and two identity funcitons to AESComponent.mix_columns. The combination of these two functions acheives the same result as the multiplication of the static matrix and the state described in the NIST document.
 
 ### AESDecryptor
 
@@ -74,11 +74,11 @@ Takes in the state. It looks up each byte in each word in the state and substitu
 
 #### shift_rows (decryption)
 
-Take in the state. Passes the state, the function that determines how much to shift the rows by, and an identity function to AESComponent.shift_rows. Passing the functions in this way shifts the bytes in the rows to the right by the desired ammounts.
+Take in the state. Passes the state, the function that determines how much to shift the rows by, and a column identity function to AESComponent.shift_rows. Passing the functions in this way shifts the bytes in the rows to the right by the desired ammounts.
 
 #### mix_columns (decryption)
 
-Takes in the state. Passes the state and four array access functions to AESComponent.mix_columns. The combination of these two functions acheives the same result as the multiplication of the static matrix and the state described in the NIST document.
+Takes in the state. Passes the state and four array access functions (gfp14, gfp13, gfp11, and gfp9) to AESComponent.mix_columns. The combination of these two functions acheives the same result as the multiplication of the static matrix and the state described in the NIST document.
 
 ### Common Arrays
 
